@@ -1,0 +1,53 @@
+﻿@model List<LostAndFound.Models.Entities.Item>
+
+<h1>All Items</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Category</td>
+                <td>@item.Type</td>
+                <td>@item.Location</td>
+                <td>@item.Status</td>
+
+                <td>
+                    <a class="btn btn-warning"
+                           asp-controller="Items"
+                           asp-action="Edit"
+                           asp-route-id="@item.Id">
+                        Edit
+                    </a>
+                </td>
+
+                <td>
+                    <form method="post"
+                          asp-controller="Items"
+                          asp-action="Delete">
+
+                        <input type="hidden"
+                               name="Id"
+                               value="@item.Id" />
+
+                        <button class="btn btn-danger">
+                            Delete
+                        </button>
+
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
