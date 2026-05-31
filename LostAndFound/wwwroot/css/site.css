@@ -29,3 +29,41 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+body {
+    background: #EAEBEA;
+}
+
+.navbar {
+    background: #550000 !important;
+}
+
+.btn-primary {
+    background: #800000 !important;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background: #D9A41F !important;
+    }
+
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+    .card:hover {
+        transform: scale(1.02);
+        transition: 0.3s;
+    }
+
+@media(max-width:768px) {
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}

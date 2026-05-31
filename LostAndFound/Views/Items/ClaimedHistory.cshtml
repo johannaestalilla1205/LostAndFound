@@ -1,0 +1,28 @@
+﻿@model List<LostAndFound.Models.Entities.ClaimHistory>
+
+<h1>Claimed History</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Claimed By</th>
+            <th>Date Claimed</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ItemTitle</td>
+                <td>@item.ClaimedBy</td>
+                <td>@item.DateClaimed</td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

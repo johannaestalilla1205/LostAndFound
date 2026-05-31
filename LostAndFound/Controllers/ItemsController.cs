@@ -8,10 +8,12 @@ namespace LostAndFound.Controllers
     public class ItemsController : Controller
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public ItemsController(ApplicationDbContext dbContext)
+        public ItemsController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnvironment)
         {
             this.dbContext = dbContext;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -23,6 +25,28 @@ namespace LostAndFound.Controllers
         [HttpPost]
         public IActionResult Add(AddItemViewModel viewModel)
         {
+            string fileName = null;
+
+            if (viewModel.ImageFile != null)
+            {
+                string uploadsFolder =
+                    Path.Combine(
+                        webHostEnvironment.WebRootPath,
+                        "images");
+
+                fileName = Guid.NewGuid().ToString() + "_" +
+                           viewModel.ImageFile.FileName;
+
+                string filePath =
+                    Path.Combine(uploadsFolder, fileName);
+
+                using (var fileStream =
+                       new FileStream(filePath, FileMode.Create))
+                {
+                    viewModel.ImageFile.CopyTo(fileStream);
+                }
+            }
+
             var item = new Item
             {
                 Title = viewModel.Title,
@@ -32,7 +56,8 @@ namespace LostAndFound.Controllers
                 Location = viewModel.Location,
                 DateLostFound = viewModel.DateLostFound,
                 ContactName = viewModel.ContactName,
-                ContactNumber = viewModel.ContactNumber
+                ContactNumber = viewModel.ContactNumber,
+                ImagePath = fileName
             };
 
             dbContext.Items.Add(item);
@@ -42,12 +67,28 @@ namespace LostAndFound.Controllers
         }
 
         [HttpGet]
-        public IActionResult List()
+        public IActionResult List(string searchTerm)
         {
-            var items = dbContext.Items.ToList();
+            var items = dbContext.Items.AsQueryable();
 
-            return View(items);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                items = items.Where(x =>
+                    x.Title.Contains(searchTerm) ||
+                    x.Category.Contains(searchTerm));
+            }
+
+            return View(items.ToList());
         }
+
+        [HttpGet]
+        public IActionResult ClaimedHistory()
+        {
+            var history = dbContext.ClaimHistories.ToList();
+
+            return View(history);
+        }
+
 
         [HttpGet]
         public IActionResult Edit(Guid id)
@@ -73,6 +114,18 @@ namespace LostAndFound.Controllers
                 item.ContactName = viewModel.ContactName;
                 item.ContactNumber = viewModel.ContactNumber;
                 item.Status = viewModel.Status;
+
+                if (viewModel.Status == "Claimed")
+                {
+                    var history = new ClaimHistory
+                    {
+                        ItemTitle = item.Title,
+                        ClaimedBy = item.ContactName,
+                        DateClaimed = DateTime.Now
+                    };
+
+                    dbContext.ClaimHistories.Add(history);
+                }
 
                 dbContext.SaveChanges();
             }

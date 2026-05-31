@@ -13,6 +13,7 @@ namespace LostAndFound.Data
 
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ClaimHistory> ClaimHistories { get; set; }
 
     }
 }

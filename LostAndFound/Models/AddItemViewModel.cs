@@ -1,4 +1,5 @@
-﻿namespace LostAndFound.Models
+﻿
+namespace LostAndFound.Models
 {
     public class AddItemViewModel
     {
@@ -17,5 +18,7 @@
         public string ContactName { get; set; }
 
         public string ContactNumber { get; set; }
+
+        public IFormFile ImageFile { get; set; }
     }
 }

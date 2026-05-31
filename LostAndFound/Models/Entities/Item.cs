@@ -21,5 +21,7 @@
         public string ContactNumber { get; set; }
 
         public string Status { get; set; } = "Pending";
+
+        public string ImagePath { get; set; }
     }
 }

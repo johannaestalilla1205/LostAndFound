@@ -1,0 +1,32 @@
+﻿<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+
+    <div class="container-fluid">
+
+        <a class="navbar-brand"
+               asp-controller="Items"
+               asp-action="List">
+            Lost & Found
+        </a>
+
+        <div>
+
+            <a class="btn btn-warning"
+                   asp-controller="Items"
+                   asp-action="Add">
+                Add Item
+            </a>
+
+            <a asp-controller="Items"
+                   asp-action="ClaimedHistory"
+                   class="btn btn-light">
+                Claimed History
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>

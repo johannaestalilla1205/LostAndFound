@@ -2,52 +2,75 @@
 
 <h1>All Items</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+<form method="get">
 
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.Category</td>
-                <td>@item.Type</td>
-                <td>@item.Location</td>
-                <td>@item.Status</td>
+    <div class="input-group mb-3">
 
-                <td>
-                    <a class="btn btn-warning"
-                           asp-controller="Items"
+        <input type="text"
+               name="searchTerm"
+               class="form-control"
+               placeholder="Search by title or category" />
+
+        <button class="btn btn-dark">
+            Search
+        </button>
+
+    </div>
+
+</form>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card h-100 shadow">
+
+                <img src="/images/@item.ImagePath"
+                     class="card-img-top"
+                     style="height:250px;
+                object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h4 style="color:#550000">
+                        @item.Title
+                    </h4>
+
+                    <span class="badge"
+                          style="background:#D9A41F">
+                        @item.Type
+                    </span>
+
+                    <p class="mt-2">
+                        <strong>Category:</strong>
+                        @item.Category
+                    </p>
+
+                    <p>
+                        <strong>Lost At:</strong>
+                        @item.Location
+                    </p>
+
+
+                    <p>
+                        <strong>Status:</strong>
+                        @item.Status
+                    </p>
+
+                    <a class="btn"
+                           style="background:#800000;color:white"
                            asp-action="Edit"
                            asp-route-id="@item.Id">
                         Edit
                     </a>
-                </td>
 
-                <td>
-                    <form method="post"
-                          asp-controller="Items"
-                          asp-action="Delete">
+                </div>
 
-                        <input type="hidden"
-                               name="Id"
-                               value="@item.Id" />
+            </div>
 
-                        <button class="btn btn-danger">
-                            Delete
-                        </button>
+        </div>
+    }
 
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</div>
