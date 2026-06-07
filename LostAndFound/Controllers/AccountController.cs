@@ -34,7 +34,13 @@ namespace LostAndFound.Controllers
 
             ViewBag.Message = "Invalid Login";
 
-            return View();
+            return Content("POST ACTION HIT");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]
