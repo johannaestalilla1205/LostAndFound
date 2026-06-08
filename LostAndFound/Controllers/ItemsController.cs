@@ -47,8 +47,13 @@ namespace LostAndFound.Controllers
                 }
             }
 
+            var userId =
+    Guid.Parse(HttpContext.Session.GetString("UserId"));
+
             var item = new Item
             {
+                UserId = userId,
+
                 Title = viewModel.Title,
                 Category = viewModel.Category,
                 Type = viewModel.Type,
@@ -57,7 +62,8 @@ namespace LostAndFound.Controllers
                 DateLostFound = viewModel.DateLostFound,
                 ContactName = viewModel.ContactName,
                 ContactNumber = viewModel.ContactNumber,
-                ImagePath = fileName
+                ImagePath = fileName,
+                Status = "Pending"
             };
 
             dbContext.Items.Add(item);
@@ -95,6 +101,19 @@ namespace LostAndFound.Controllers
         {
             var item = dbContext.Items.Find(id);
 
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId =
+                Guid.Parse(HttpContext.Session.GetString("UserId"));
+
+            if (item.UserId != currentUserId)
+            {
+                return Unauthorized();
+            }
+
             return View(item);
         }
 
@@ -114,6 +133,13 @@ namespace LostAndFound.Controllers
                 item.ContactName = viewModel.ContactName;
                 item.ContactNumber = viewModel.ContactNumber;
                 item.Status = viewModel.Status;
+
+                var currentUserId = Guid.Parse(HttpContext.Session.GetString("UserId"));
+
+                if (item.UserId != currentUserId)
+                {
+                    return Unauthorized();
+                }
 
                 if (viewModel.Status == "Claimed")
                 {
@@ -140,6 +166,12 @@ namespace LostAndFound.Controllers
 
             if (item != null)
             {
+                var currentUserId = Guid.Parse(HttpContext.Session.GetString("UserId"));
+
+                if (item.UserId != currentUserId)
+                {
+                    return Unauthorized();
+                }
                 dbContext.Items.Remove(item);
 
                 dbContext.SaveChanges();

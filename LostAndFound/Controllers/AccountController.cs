@@ -27,14 +27,17 @@ namespace LostAndFound.Controllers
                 x.StudentNumber == viewModel.StudentNumber &&
                 x.Password == viewModel.Password);
 
-            if (user != null)
+            if (user == null)
             {
-                return RedirectToAction("List", "Items");
+                ViewBag.Error = "Invalid login";
+                return View();
             }
 
-            ViewBag.Message = "Invalid Login";
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("StudentNumber", user.StudentNumber);
+            HttpContext.Session.SetString("Role", user.Role);
 
-            return Content("POST ACTION HIT");
+            return RedirectToAction("List", "Items");
         }
 
         public IActionResult Logout()

@@ -19,10 +19,37 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">
-                            Logout
-                        </a>
+                    <ul class="navbar-nav flex-grow-1 align-items-center gap-2">
+                        <!-- Always show items list link -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Items" asp-action="List">View Items</a>
+                        </li>
+        
+                        @* Conditionally show Add Item and Claim History links if user is logged in *@
+                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserId")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Items" asp-action="ClaimedHistory">Claim History</a>
+                            </li>
+                            <li class="nav-item ms-auto">
+                                <a asp-controller="Items" asp-action="Add" class="btn btn-outline-primary text-dark">
+                                    Add Item
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ms-auto">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-primary">
+                                    Login
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

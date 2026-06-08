@@ -4,6 +4,8 @@
     {
         public Guid Id { get; set; }
 
+        public Guid UserId { get; set; }
+
         public string Title { get; set; }
 
         public string Category { get; set; }
@@ -23,5 +25,7 @@
         public string Status { get; set; } = "Pending";
 
         public string ImagePath { get; set; }
+
+        public User User { get; set; }
     }
 }

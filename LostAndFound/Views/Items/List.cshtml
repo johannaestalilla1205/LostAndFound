@@ -1,76 +1,90 @@
-﻿@model List<LostAndFound.Models.Entities.Item>
+﻿@using Microsoft.AspNetCore.Http
+@model List<LostAndFound.Models.Entities.Item>
 
-<h1>All Items</h1>
+@{
+    var currentUserId = Context.Session.GetString("UserId");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>All Items</h1>
+    
+    @* Show the Add Item button ONLY if the user is logged in *@
+    @if (!string.IsNullOrEmpty(currentUserId))
+    {
+        <a asp-controller="Items" asp-action="Add" class="btn btn-success">
+            + Add Item
+        </a>
+    }
+</div>
 
 <form method="get">
-
     <div class="input-group mb-3">
-
         <input type="text"
                name="searchTerm"
                class="form-control"
                placeholder="Search by title or category" />
-
         <button class="btn btn-dark">
             Search
         </button>
-
     </div>
-
 </form>
 
 <div class="row">
-
     @foreach (var item in Model)
     {
         <div class="col-md-4 mb-4">
-
             <div class="card h-100 shadow">
-
                 <img src="/images/@item.ImagePath"
                      class="card-img-top"
-                     style="height:250px;
-                object-fit:cover;">
+                     style="height:250px; object-fit:cover;">
 
-                <div class="card-body">
-
-                    <h4 style="color:#550000">
+                <div class="card-body d-flex flex-column">
+                    <h4 style="color:#550000" class="card-title">
                         @item.Title
                     </h4>
 
-                    <span class="badge"
-                          style="background:#D9A41F">
-                        @item.Type
-                    </span>
+                    <div>
+                        <span class="badge" style="background:#D9A41F">
+                            @item.Type
+                        </span>
+                    </div>
 
-                    <p class="mt-2">
-                        <strong>Category:</strong>
-                        @item.Category
-                    </p>
+                    <div class="mt-3 flex-grow-1">
+                        <p class="mb-1"><strong>Category:</strong> @item.Category</p>
+                        <p class="mb-1"><strong>Location:</strong> @item.Location</p>
+                        <p class="mb-3"><strong>Status:</strong> @item.Status</p>
+                        
+                        <hr />
+                        
+                        <h6 class="text-muted mb-2" style="font-size: 0.9rem;">Contact Information:</h6>
+                        <p class="mb-1"><strong>Name:</strong> @item.ContactName</p>
+                        <p class="mb-1"><strong>Contact No:</strong> @item.ContactNumber</p>
+                    </div>
 
-                    <p>
-                        <strong>Lost At:</strong>
-                        @item.Location
-                    </p>
+                    @* Action buttons for item owners *@
+                    @if (currentUserId == item.UserId.ToString())
+                    {
+                        <div class="mt-3 pt-2 border-top d-flex gap-2">
+                            <a class="btn btn-warning flex-grow-1"
+                                   asp-action="Edit"
+                                   asp-route-id="@item.Id">
+                                Edit
+                            </a>
 
-
-                    <p>
-                        <strong>Status:</strong>
-                        @item.Status
-                    </p>
-
-                    <a class="btn"
-                           style="background:#800000;color:white"
-                           asp-action="Edit"
-                           asp-route-id="@item.Id">
-                        Edit
-                    </a>
-
+                            <form asp-action="Delete" method="post" class="flex-grow-1" style="display:inline;">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger w-100">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    }
                 </div>
-
             </div>
-
         </div>
     }
-
+</div>
+            </div>
+        </div>
+    }
 </div>
