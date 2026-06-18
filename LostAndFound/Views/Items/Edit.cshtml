@@ -20,11 +20,12 @@
     </div>
 
     <div class="mt-3">
-        <label>Status</label>
-        <select class="form-control" asp-for="Status">
-            <option>Pending</option>
-            <option>Found</option>
-            <option>Claimed</option>
+        <label class="form-label">Status</label>
+        <select class="form-select" asp-for="Status">
+            <option value="" disabled>Select Status ▼</option>
+            <option value="Pending">Pending</option>
+            <option value="Found">Found</option>
+            <option value="Claimed">Claimed</option>
         </select>
     </div>
 

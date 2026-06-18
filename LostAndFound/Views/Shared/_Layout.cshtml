@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,34 +18,45 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LostAndFound</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color: white;">LostAndFound</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 align-items-center gap-2">
-                        <!-- Always show items list link -->
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Items" asp-action="List">View Items</a>
+                            <a class="nav-link" asp-controller="Items" asp-action="List" style="color: white">
+                                View Items
+                            </a>
                         </li>
-        
-                        @* Conditionally show Add Item and Claim History links if user is logged in *@
+
                         @if (!string.IsNullOrEmpty(Context.Session.GetString("UserId")))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Items" asp-action="ClaimedHistory">Claim History</a>
+                                <a class="nav-link" asp-controller="Items" asp-action="ClaimedHistory" style="color: white;">
+                                    Claim History
+                                </a>
                             </li>
+
                             <li class="nav-item ms-auto">
-                                <a asp-controller="Items" asp-action="Add" class="btn btn-outline-primary text-dark">
+                                <a asp-controller="Items" asp-action="Add" class="btn btn-outline-light">
                                     Add Item
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">
-                                    Logout
-                                </a>
-                            </li>
+
+                            @if (!(currentController == "Account" && currentAction == "Login"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Account"
+                                           asp-action="Logout"
+                                           class="btn btn-danger"
+                                           onclick="return confirm('Do you want to log out?');">
+                                        Logout
+                                    </a>
+                                </li>
+                            }
                         }
                         else
                         {
@@ -50,6 +66,7 @@
                                 </a>
                             </li>
                         }
+
                     </ul>
                 </div>
             </div>
